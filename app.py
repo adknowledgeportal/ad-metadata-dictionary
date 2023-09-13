@@ -1,13 +1,13 @@
-import palmerpenguins
 import pandas as pd
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 
-penguins = palmerpenguins.load_penguins()
-# Slim down the data frame to a few representative columns
-penguins = penguins.loc[
-    penguins["body_mass_g"].notnull(),
-    ["species", "island", "body_mass_g", "year"],
-]
+# get live AD.model.csv from adkp/data-models repo
+url = "https://raw.githubusercontent.com/adknowledgeportal/data-models/main/AD.model.csv"
+model = pd.read_csv(url)
+
+# drop a few columns
+model = model.drop(['DependsOn Component', 'Properties', 'Required'], axis = 1)
+
 
 app_ui = ui.page_fluid(
     ui.input_select(
@@ -38,7 +38,7 @@ def server(input: Inputs, output: Outputs, session: Session):
         width = "100%" if input.fullwidth() else "fit-content"
         if input.gridstyle():
             return render.DataGrid(
-                penguins,
+                model,
                 row_selection_mode=input.selection_mode(),
                 height=height,
                 width=width,
@@ -46,7 +46,7 @@ def server(input: Inputs, output: Outputs, session: Session):
             )
         else:
             return render.DataTable(
-                penguins,
+                model,
                 row_selection_mode=input.selection_mode(),
                 height=height,
                 width=width,
@@ -61,7 +61,7 @@ def server(input: Inputs, output: Outputs, session: Session):
             and len(input.grid_selected_rows()) > 0
         ):
             # "split", "records", "index", "columns", "values", "table"
-            return penguins.iloc[list(input.grid_selected_rows())]
+            return model.iloc[list(input.grid_selected_rows())]
 
 
 app = App(app_ui, server)
