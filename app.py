@@ -12,7 +12,6 @@ model = model.drop(['DependsOn Component', 'Properties', 'Required'], axis = 1)
 app_ui = ui.page_fluid(
     ui.input_switch("fullwidth", "Take full width", True),
     ui.input_switch("fixedheight", "Fixed height", True),
-    ui.input_switch("filters", "Filters", True),
     ui.output_data_frame("grid"),
     ui.panel_fixed(
         ui.output_text_verbatim("detail"),
@@ -33,7 +32,7 @@ def server(input: Inputs, output: Outputs, session: Session):
             model,
             height=height,
             width=width,
-            filters=input.filters(),
+            filters=True,
         )
 
 
