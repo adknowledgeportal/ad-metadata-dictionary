@@ -32,12 +32,12 @@ merged_df = values_df.merge(
     left_on = "Parent", 
     right_on = "Key")
 
-merged_df =merged_df[["Key",
-           "Key Description",
-           "Value",
-           "Value Description",
-           "Source",
-           "Key Type"]]
+merged_df = merged_df[["Key", 
+                      "Key Type",
+                      "Key Description",
+                      "Value",
+                      "Value Description",
+                      "Source"]]
 
 # sort alphabetically
 sorted_df = merged_df.sort_values(by = ["Key", "Value"], 
@@ -45,12 +45,18 @@ sorted_df = merged_df.sort_values(by = ["Key", "Value"],
                                   ascending = True,
                                   key = lambda col: col.str.lower())
 
+# make clickable urls in source column
+
+# wrap urls in source column (27 is length of purl obo)
+#sorted_df["Source"] = sorted_df["Source"].str.wrap(width = 27, break_long_words=True, drop_whitespace=False)
 
 # app ui
 app_ui = ui.page_fluid(
     ui.h1("Search the AD Knowledge Portal Data Model Dictionary"),
-    ui.output_data_frame("grid"),
-    class_="p-3"
+    ui.row(
+        ui.column(11, ui.output_data_frame("grid"))
+    ),
+    class_="p-4"
 )
 
 
@@ -60,8 +66,8 @@ def server(input: Inputs, output: Outputs, session: Session):
     def grid():
        return render.DataGrid(
             sorted_df,
-            height=500,
-            width="100%",
+            height=600,
+            width="fit-to-content",
             filters=True,
             summary=True
         )
