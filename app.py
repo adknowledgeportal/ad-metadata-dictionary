@@ -16,7 +16,6 @@ app_ui = ui.page_fluid(
         {"none": "(None)", "single": "Single", "multiple": "Multiple"},
         selected="multiple",
     ),
-    ui.input_switch("gridstyle", "Grid", True),
     ui.input_switch("fullwidth", "Take full width", True),
     ui.input_switch("fixedheight", "Fixed height", True),
     ui.input_switch("filters", "Filters", True),
@@ -36,22 +35,13 @@ def server(input: Inputs, output: Outputs, session: Session):
     def grid():
         height = 350 if input.fixedheight() else None
         width = "100%" if input.fullwidth() else "fit-content"
-        if input.gridstyle():
-            return render.DataGrid(
-                model,
-                row_selection_mode=input.selection_mode(),
-                height=height,
-                width=width,
-                filters=input.filters(),
-            )
-        else:
-            return render.DataTable(
-                model,
-                row_selection_mode=input.selection_mode(),
-                height=height,
-                width=width,
-                filters=input.filters(),
-            )
+        return render.DataTable(
+            model,
+            row_selection_mode=input.selection_mode(),
+            height=height,
+            width=width,
+            filters=input.filters(),
+        )
 
     @output
     @render.text
