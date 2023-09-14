@@ -48,10 +48,8 @@ sorted_df = merged_df.sort_values(by = ["Key", "Value"],
 
 # app ui
 app_ui = ui.page_fluid(
-    ui.input_switch("fullwidth", "Take full width", True),
-    ui.input_switch("fixedheight", "Fixed height", True),
+    ui.h1("Search the AD Knowledge Portal Data Model Dictionary"),
     ui.output_data_frame("grid"),
-
     class_="p-3"
 )
 
@@ -60,12 +58,10 @@ def server(input: Inputs, output: Outputs, session: Session):
     @output
     @render.data_frame
     def grid():
-        height = 500 if input.fixedheight() else None
-        width = "100%" if input.fullwidth() else "fit-content"
-        return render.DataTable(
+       return render.DataGrid(
             sorted_df,
-            height=height,
-            width=width,
+            height=500,
+            width="100%",
             filters=True,
             summary=True
         )
