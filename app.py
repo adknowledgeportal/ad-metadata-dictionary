@@ -2,8 +2,8 @@ import pandas as pd
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 
 # get live AD.model.csv from adkp/data-models repo
-url = "https://raw.githubusercontent.com/adknowledgeportal/data-models/main/AD.model.csv"
-model_df = pd.read_csv(url)
+#url = "https://raw.githubusercontent.com/adknowledgeportal/data-models/main/AD.model.csv"
+model_df = pd.read_csv("AD.model.csv")
 
 # remove template rows
 model_df = model_df.loc[model_df["Parent"] != "DataType"]
